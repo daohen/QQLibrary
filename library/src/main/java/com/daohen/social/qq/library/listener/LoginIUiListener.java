@@ -1,8 +1,8 @@
 package com.daohen.social.qq.library.listener;
 
-import android.content.Context;
 
-import com.daohen.social.qq.library.QQProvider;
+import com.daohen.personal.toolbox.library.util.Booleans;
+import com.daohen.personal.toolbox.library.util.Logs;
 import com.daohen.social.qq.library.bean.LoginResponse;
 import com.daohen.thirdparty.library.gson.GsonFactory;
 import com.google.gson.reflect.TypeToken;
@@ -18,32 +18,36 @@ import java.lang.reflect.Type;
  * EMAIL: alunfeixue2011@gmail.com
  * DATA : 2017/07/17 23:53
  */
-public class LoginIUiListener implements IUiListener {
+public abstract class LoginIUiListener implements IUiListener {
 
-    private LoginListener listener;
-    private Context context;
+    public abstract void onSuccess(LoginResponse response);
 
-    public LoginIUiListener(Context context, LoginListener listener){
-        this.listener = listener;
-        this.context = context;
-    }
+    public abstract void onFail(UiError uiError);
 
     @Override
     public void onComplete(Object o) {
         JSONObject jsonObject = (JSONObject) o;
+        if (!Booleans.isRelease()){
+            Logs.d(LoginIUiListener.class.getSimpleName() + "=" + jsonObject.toString());
+        }
         Type type = new TypeToken<LoginResponse>(){}.getType();
         LoginResponse response = GsonFactory.getDefault().fromJson(jsonObject.toString(), type);
-        QQProvider.get().getUserInfo(listener);
+        onSuccess(response);
     }
 
     @Override
     public void onError(UiError uiError) {
-        listener.onFail(uiError);
+        if (!Booleans.isRelease()){
+            Logs.d(LoginIUiListener.class.getSimpleName() + "=" + GsonFactory.getDefault().toJson(uiError));
+        }
+        onFail(uiError);
     }
 
     @Override
     public void onCancel() {
-
+        if (!Booleans.isRelease()){
+            Logs.d(LoginIUiListener.class.getSimpleName() + " onCancel");
+        }
     }
 
 }

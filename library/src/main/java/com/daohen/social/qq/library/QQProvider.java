@@ -8,7 +8,6 @@ import android.os.Bundle;
 import com.daohen.personal.toolbox.library.Singleton;
 import com.daohen.personal.toolbox.library.util.Toasts;
 import com.daohen.social.qq.library.listener.LoginIUiListener;
-import com.daohen.social.qq.library.listener.LoginListener;
 import com.daohen.social.qq.library.listener.UserInfoIUiListener;
 import com.tencent.connect.UserInfo;
 import com.tencent.connect.share.QQShare;
@@ -42,7 +41,7 @@ public class QQProvider {
         return tencent;
     }
 
-    public void login(Activity activity, LoginListener listener){
+    public void login(Activity activity, LoginIUiListener listener){
         checkNull();
 
         if (tencent.isSessionValid()){
@@ -50,7 +49,7 @@ public class QQProvider {
             return;
         }
 
-        tencent.login(activity, "all", new LoginIUiListener(activity.getApplicationContext(), listener));
+        tencent.login(activity, "all", listener);
     }
 
     public void logout(Context context){
@@ -59,11 +58,11 @@ public class QQProvider {
         tencent.logout(context);
     }
 
-    public void getUserInfo(LoginListener listener){
+    public void getUserInfo(UserInfoIUiListener listener){
         checkNull();
 
         UserInfo userInfo = new UserInfo(context, tencent.getQQToken());
-        userInfo.getUserInfo(new UserInfoIUiListener(listener));
+        userInfo.getUserInfo(listener);
     }
 
 
