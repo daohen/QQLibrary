@@ -2,6 +2,7 @@ package com.daohen.social.qq.library;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.daohen.personal.toolbox.library.Singleton;
@@ -63,6 +64,11 @@ public class QQProvider {
 
         UserInfo userInfo = new UserInfo(context, tencent.getQQToken());
         userInfo.getUserInfo(new UserInfoIUiListener(listener));
+    }
+
+
+    public void onActivityResultData(int requestCode, int resultCode, Intent data, IUiListener listener){
+        Tencent.onActivityResultData(requestCode, resultCode, data, listener);
     }
 
     public void shareLocalImage(Activity activity, String path, IUiListener listener){
