@@ -3,6 +3,7 @@ package com.daohen.social.qq.library.listener;
 
 import com.daohen.personal.toolbox.library.util.Booleans;
 import com.daohen.personal.toolbox.library.util.Logs;
+import com.daohen.social.qq.library.QQProvider;
 import com.daohen.social.qq.library.bean.LoginResponse;
 import com.daohen.thirdparty.library.gson.GsonFactory;
 import com.google.gson.reflect.TypeToken;
@@ -32,6 +33,8 @@ public abstract class LoginIUiListener implements IUiListener {
         }
         Type type = new TypeToken<LoginResponse>(){}.getType();
         LoginResponse response = GsonFactory.getDefault().fromJson(jsonObject.toString(), type);
+        QQProvider.get().getTencent().setOpenId(response.getOpenid());
+        QQProvider.get().getTencent().setAccessToken(response.getAccessToken(), response.getExpiresIn());
         onSuccess(response);
     }
 
