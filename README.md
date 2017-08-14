@@ -30,6 +30,15 @@ dependencies {
     </intent-filter>
 </activity>
 ```
+以上就配置好了，下面我们就可以调用QQProvider的方法来进行业务处理，所有操作都已经封装在QQProvider中
+
+在做登录操作时，要注意，需要在页面的onActivityResult方法里面调用以下代码
+```java
+if (requestCode == Constants.REQUEST_LOGIN){
+    QQProvider.get().onActivityResultData(requestCode, resultCode, data, loginIUiListener);
+}
+```
+
 
 代码混淆
 ```
