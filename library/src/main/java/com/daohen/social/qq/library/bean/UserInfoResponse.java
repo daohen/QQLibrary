@@ -110,4 +110,27 @@ public class UserInfoResponse {
         return city;
     }
 
+    public String getPay_token() {
+        return pay_token;
+    }
+
+    public String getPf() {
+        return pf;
+    }
+
+    public String getExpires_in() {
+        return expires_in;
+    }
+
+    public String getOpenid() {
+        return openid;
+    }
+
+    public String getPfkey() {
+        return pfkey;
+    }
+
+    public String getAccess_token() {
+        return access_token;
+    }
 }
