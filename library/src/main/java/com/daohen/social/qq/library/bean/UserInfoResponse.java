@@ -24,6 +24,24 @@ public class UserInfoResponse {
     private String province;
     private String city;
 
+    private String pay_token;
+    private String pf;
+    private String expires_in;
+    private String openid;
+    private String pfkey;
+    private String access_token;
+
+    public void setLoginResponse(LoginResponse response) {
+        this.pay_token = response.getPayToken();
+        this.pf = response.getPf();
+        this.expires_in = response.getExpiresIn();
+        this.openid = response.getOpenid();
+        this.pfkey = response.getPfkey();
+        this.access_token = response.getAccessToken();
+    }
+
+
+
     public String getIs_yellow_year_vip() {
         return is_yellow_year_vip;
     }
@@ -91,4 +109,5 @@ public class UserInfoResponse {
     public String getCity() {
         return city;
     }
+
 }

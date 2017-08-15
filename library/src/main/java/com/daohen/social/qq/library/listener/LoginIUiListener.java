@@ -3,8 +3,8 @@ package com.daohen.social.qq.library.listener;
 
 import com.daohen.personal.toolbox.library.util.Booleans;
 import com.daohen.personal.toolbox.library.util.Logs;
-import com.daohen.social.qq.library.QQProvider;
 import com.daohen.social.qq.library.bean.LoginResponse;
+import com.daohen.social.qq.library.bean.UserInfoResponse;
 import com.daohen.thirdparty.library.gson.GsonFactory;
 import com.google.gson.reflect.TypeToken;
 import com.tencent.tauth.IUiListener;
@@ -21,9 +21,14 @@ import java.lang.reflect.Type;
  */
 public abstract class LoginIUiListener implements IUiListener {
 
-    public abstract void onSuccess(LoginResponse response);
+    public abstract void onSuccess(UserInfoResponse response);
 
     public abstract void onFail(UiError uiError);
+
+    private LoginResponse loginResponse;
+    protected void setLoginResponse(LoginResponse response){
+        this.loginResponse = response;
+    }
 
     @Override
     public void onComplete(Object o) {
@@ -31,10 +36,13 @@ public abstract class LoginIUiListener implements IUiListener {
         if (!Booleans.isRelease()){
             Logs.d(LoginIUiListener.class.getSimpleName() + "=" + jsonObject.toString());
         }
-        Type type = new TypeToken<LoginResponse>(){}.getType();
-        LoginResponse response = GsonFactory.getDefault().fromJson(jsonObject.toString(), type);
-        QQProvider.get().getTencent().setOpenId(response.getOpenid());
-        QQProvider.get().getTencent().setAccessToken(response.getAccessToken(), response.getExpiresIn());
+        Type type = new TypeToken<UserInfoResponse>(){}.getType();
+        UserInfoResponse response = GsonFactory.getDefault().fromJson(jsonObject.toString(), type);
+
+        if (loginResponse == null)
+            throw new NullPointerException("error");
+
+        response.setLoginResponse(loginResponse);
         onSuccess(response);
     }
 

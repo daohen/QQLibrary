@@ -7,9 +7,8 @@ import android.os.Bundle;
 
 import com.daohen.personal.toolbox.library.Singleton;
 import com.daohen.personal.toolbox.library.util.Toasts;
+import com.daohen.social.qq.library.listener.DefaultLoginIUiListener;
 import com.daohen.social.qq.library.listener.LoginIUiListener;
-import com.daohen.social.qq.library.listener.UserInfoIUiListener;
-import com.tencent.connect.UserInfo;
 import com.tencent.connect.share.QQShare;
 import com.tencent.tauth.IUiListener;
 import com.tencent.tauth.Tencent;
@@ -25,6 +24,9 @@ public class QQProvider {
     private Context context;
     private String appid;
     private String appname;
+
+    private DefaultLoginIUiListener defaultLoginIUiListener;
+    private LoginIUiListener loginIUiListener;
 
     public static final QQProvider get(){
         return gDefault.get();
@@ -49,7 +51,9 @@ public class QQProvider {
             return;
         }
 
-        tencent.login(activity, "all", listener);
+        this.loginIUiListener = listener;
+        defaultLoginIUiListener = new DefaultLoginIUiListener(context, tencent, loginIUiListener);
+        tencent.login(activity, "all", defaultLoginIUiListener);
     }
 
     public void logout(Context context){
@@ -58,16 +62,8 @@ public class QQProvider {
         tencent.logout(context);
     }
 
-    public void getUserInfo(UserInfoIUiListener listener){
-        checkNull();
-
-        UserInfo userInfo = new UserInfo(context, tencent.getQQToken());
-        userInfo.getUserInfo(listener);
-    }
-
-
-    public void onActivityResultData(int requestCode, int resultCode, Intent data, IUiListener listener){
-        Tencent.onActivityResultData(requestCode, resultCode, data, listener);
+    public void onActivityResultData(int requestCode, int resultCode, Intent data){
+        Tencent.onActivityResultData(requestCode, resultCode, data, defaultLoginIUiListener);
     }
 
     public void shareLocalImage(Activity activity, String path, IUiListener listener){
