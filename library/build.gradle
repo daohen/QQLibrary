@@ -26,6 +26,7 @@ dependencies {
 
     provided 'com.github.daohen:personalToolboxLibrary:master-SNAPSHOT'
     provided 'com.github.daohen:thirdPartyLibrary:master-SNAPSHOT'
+    provided 'com.android.support:support-v4:25.3.1'
 }
 
 configurations.all {
