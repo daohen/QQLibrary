@@ -47,13 +47,12 @@ public class QQProvider {
         checkNull();
 
         if (tencent.isSessionValid()){
+            this.loginIUiListener = listener;
+            defaultLoginIUiListener = new DefaultLoginIUiListener(context, tencent, loginIUiListener);
+            tencent.login(activity, "all", defaultLoginIUiListener);
+        } else {
             Toasts.showLong("session invalid");
-            return;
         }
-
-        this.loginIUiListener = listener;
-        defaultLoginIUiListener = new DefaultLoginIUiListener(context, tencent, loginIUiListener);
-        tencent.login(activity, "all", defaultLoginIUiListener);
     }
 
     public void logout(Context context){
