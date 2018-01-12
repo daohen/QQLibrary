@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.daohen.personal.toolbox.library.Singleton;
-import com.daohen.personal.toolbox.library.util.Toasts;
 import com.daohen.social.qq.library.listener.DefaultLoginIUiListener;
 import com.daohen.social.qq.library.listener.LoginIUiListener;
 import com.tencent.connect.share.QQShare;
@@ -46,13 +45,9 @@ public class QQProvider {
     public void login(Activity activity, LoginIUiListener listener){
         checkNull();
 
-        if (tencent.isSessionValid()){
-            this.loginIUiListener = listener;
-            defaultLoginIUiListener = new DefaultLoginIUiListener(context, tencent, loginIUiListener);
-            tencent.login(activity, "all", defaultLoginIUiListener);
-        } else {
-            Toasts.showLong("session invalid");
-        }
+        this.loginIUiListener = listener;
+        defaultLoginIUiListener = new DefaultLoginIUiListener(context, tencent, loginIUiListener);
+        tencent.login(activity, "all", defaultLoginIUiListener);
     }
 
     public void logout(Context context){
