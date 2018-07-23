@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.daohen.personal.toolbox.library.Singleton;
+import com.daohen.personal.toolbox.library.util.Toasts;
 import com.daohen.social.qq.library.listener.DefaultLoginIUiListener;
 import com.daohen.social.qq.library.listener.LoginIUiListener;
 import com.tencent.connect.share.QQShare;
@@ -43,7 +44,8 @@ public class QQProvider {
     }
 
     public void login(Activity activity, LoginIUiListener listener){
-        checkNull();
+        if (checkNull())
+            return;
 
         this.loginIUiListener = listener;
         defaultLoginIUiListener = new DefaultLoginIUiListener(context, tencent, loginIUiListener);
@@ -51,7 +53,8 @@ public class QQProvider {
     }
 
     public void logout(Context context){
-        checkNull();
+        if (checkNull())
+            return;
 
         tencent.logout(context);
     }
@@ -103,7 +106,8 @@ public class QQProvider {
     }
 
     private void share(final Activity activity, final Bundle bundle, final IUiListener listener){
-        checkNull();
+        if (checkNull())
+            return;
 
         activity.runOnUiThread(new Runnable() {
             @Override
@@ -120,9 +124,12 @@ public class QQProvider {
         }
     };
 
-    private void checkNull(){
-        if (tencent == null)
-            throw new NullPointerException("需要先注册到QQ才能使用，请先调用registerQQ");
+    private boolean checkNull(){
+        if (tencent == null) {
+            Toasts.show("调起QQ失败,请重启应用");
+            return true;
+        }
+        return false;
     }
 
 }
