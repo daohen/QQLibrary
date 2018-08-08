@@ -4,14 +4,18 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 
 import com.daohen.personal.toolbox.library.Singleton;
 import com.daohen.personal.toolbox.library.util.Toasts;
 import com.daohen.social.qq.library.listener.DefaultLoginIUiListener;
 import com.daohen.social.qq.library.listener.LoginIUiListener;
 import com.tencent.connect.share.QQShare;
+import com.tencent.connect.share.QzoneShare;
 import com.tencent.tauth.IUiListener;
 import com.tencent.tauth.Tencent;
+
+import java.util.ArrayList;
 
 /**
  * CREATE BY ALUN
@@ -68,7 +72,7 @@ public class QQProvider {
         bundle.putInt(QQShare.SHARE_TO_QQ_KEY_TYPE, QQShare.SHARE_TO_QQ_TYPE_IMAGE);
         bundle.putString(QQShare.SHARE_TO_QQ_IMAGE_LOCAL_URL, path);
         bundle.putString(QQShare.SHARE_TO_QQ_APP_NAME, appname);
-        share(activity, bundle, listener);
+        share(activity, bundle, listener, false);
     }
 
     public void shareDefault(Activity activity, String title, String summary, String targetUrl, String imageUrl, IUiListener listener){
@@ -79,7 +83,7 @@ public class QQProvider {
         bundle.putString(QQShare.SHARE_TO_QQ_TARGET_URL, targetUrl);
         bundle.putString(QQShare.SHARE_TO_QQ_IMAGE_URL, imageUrl);
         bundle.putString(QQShare.SHARE_TO_QQ_APP_NAME, appname);
-        share(activity, bundle, listener);
+        share(activity, bundle, listener, false);
     }
 
     public void shareApp(Activity activity, String title, String summary, String targetUrl, String imageUrl, IUiListener listener){
@@ -90,7 +94,7 @@ public class QQProvider {
         bundle.putString(QQShare.SHARE_TO_QQ_TARGET_URL, targetUrl);
         bundle.putString(QQShare.SHARE_TO_QQ_IMAGE_URL, imageUrl);
         bundle.putString(QQShare.SHARE_TO_QQ_APP_NAME, appname);
-        share(activity, bundle, listener);
+        share(activity, bundle, listener, false);
     }
 
     public void shareAudio(Activity activity, String title, String summary, String targetUrl, String imageUrl, String audioUrl, IUiListener listener){
@@ -102,19 +106,33 @@ public class QQProvider {
         bundle.putString(QQShare.SHARE_TO_QQ_IMAGE_URL, imageUrl);
         bundle.putString(QQShare.SHARE_TO_QQ_APP_NAME, appname);
         bundle.putString(QQShare.SHARE_TO_QQ_AUDIO_URL, audioUrl);
-        share(activity, bundle, listener);
+        share(activity, bundle, listener, false);
     }
 
-    private void share(final Activity activity, final Bundle bundle, final IUiListener listener){
+    private void share(final Activity activity, final Bundle bundle, final IUiListener listener, final boolean isQzone){
         if (checkNull())
             return;
 
         activity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                tencent.shareToQQ(activity, bundle, listener);
+                if (isQzone){
+                    tencent.shareToQzone(activity, bundle, listener);
+                } else {
+                    tencent.shareToQQ(activity, bundle, listener);
+                }
             }
         });
+    }
+
+    public void shareQzone(Activity activity, @NonNull String title, String summary, @NonNull String targetUrl, ArrayList<String> imageUrls, IUiListener listener){
+        Bundle bundle = new Bundle();
+        bundle.putInt(QzoneShare.SHARE_TO_QZONE_KEY_TYPE, QzoneShare.SHARE_TO_QZONE_TYPE_IMAGE_TEXT);
+        bundle.putString(QzoneShare.SHARE_TO_QQ_TITLE, title);
+        bundle.putString(QzoneShare.SHARE_TO_QQ_SUMMARY, summary);
+        bundle.putString(QzoneShare.SHARE_TO_QQ_TARGET_URL, targetUrl);
+        bundle.putStringArrayList(QzoneShare.SHARE_TO_QQ_IMAGE_URL, imageUrls);
+        share(activity, bundle, listener, true);
     }
 
     private static final Singleton<QQProvider> gDefault = new Singleton<QQProvider>() {
