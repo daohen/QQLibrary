@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 
 import com.daohen.personal.toolbox.library.Singleton;
+import com.daohen.personal.toolbox.library.util.Strings;
 import com.daohen.personal.toolbox.library.util.Toasts;
 import com.daohen.social.qq.library.listener.DefaultLoginIUiListener;
 import com.daohen.social.qq.library.listener.LoginIUiListener;
@@ -129,9 +130,11 @@ public class QQProvider {
         Bundle bundle = new Bundle();
         bundle.putInt(QzoneShare.SHARE_TO_QZONE_KEY_TYPE, QzoneShare.SHARE_TO_QZONE_TYPE_IMAGE_TEXT);
         bundle.putString(QzoneShare.SHARE_TO_QQ_TITLE, title);
-        bundle.putString(QzoneShare.SHARE_TO_QQ_SUMMARY, summary);
+        if (!Strings.isNull(summary))
+            bundle.putString(QzoneShare.SHARE_TO_QQ_SUMMARY, summary);
         bundle.putString(QzoneShare.SHARE_TO_QQ_TARGET_URL, targetUrl);
-        bundle.putStringArrayList(QzoneShare.SHARE_TO_QQ_IMAGE_URL, imageUrls);
+        if (imageUrls != null && imageUrls.size() > 0)
+            bundle.putStringArrayList(QzoneShare.SHARE_TO_QQ_IMAGE_URL, imageUrls);
         share(activity, bundle, listener, true);
     }
 
