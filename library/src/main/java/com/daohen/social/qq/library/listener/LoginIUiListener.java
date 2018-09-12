@@ -30,6 +30,12 @@ public abstract class LoginIUiListener implements IUiListener {
         this.loginResponse = response;
     }
 
+    private String unionId;
+
+    public void setUnionId(String unionId) {
+        this.unionId = unionId;
+    }
+
     @Override
     public void onComplete(Object o) {
         JSONObject jsonObject = (JSONObject) o;
@@ -43,6 +49,7 @@ public abstract class LoginIUiListener implements IUiListener {
             throw new NullPointerException("error");
 
         response.setLoginResponse(loginResponse);
+        response.setUnionId(unionId);
         onSuccess(response);
     }
 

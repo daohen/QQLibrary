@@ -3,12 +3,13 @@ package com.daohen.social.qq.library.listener;
 
 import android.content.Context;
 
+import com.daohen.personal.toolbox.library.function.Callback;
 import com.daohen.personal.toolbox.library.util.Booleans;
 import com.daohen.personal.toolbox.library.util.Logs;
 import com.daohen.social.qq.library.bean.LoginResponse;
+import com.daohen.social.qq.library.bean.UserInfoWrap;
 import com.daohen.thirdparty.library.gson.GsonFactory;
 import com.google.gson.reflect.TypeToken;
-import com.tencent.connect.UserInfo;
 import com.tencent.tauth.IUiListener;
 import com.tencent.tauth.Tencent;
 import com.tencent.tauth.UiError;
@@ -47,8 +48,13 @@ public class DefaultLoginIUiListener implements IUiListener {
         tencent.setAccessToken(response.getAccessToken(), response.getExpiresIn());
         loginIUiListener.setLoginResponse(response);
 
-        UserInfo userInfo = new UserInfo(context, tencent.getQQToken());
-        userInfo.getUserInfo(loginIUiListener);
+        final UserInfoWrap userInfo = new UserInfoWrap(context, tencent.getQQToken());
+        userInfo.getUnionId(new DefaultUnionIdIUiListener(loginIUiListener, new Callback() {
+            @Override
+            public void run() {
+                userInfo.getUserInfo(loginIUiListener);
+            }
+        }));
     }
 
     @Override

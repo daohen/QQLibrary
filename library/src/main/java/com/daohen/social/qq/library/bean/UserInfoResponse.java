@@ -31,6 +31,12 @@ public class UserInfoResponse {
     private String pfkey;
     private String access_token;
 
+    private String unionId;
+
+    public void setUnionId(String unionId) {
+        this.unionId = unionId;
+    }
+
     public void setLoginResponse(LoginResponse response) {
         this.pay_token = response.getPayToken();
         this.pf = response.getPf();
@@ -132,5 +138,9 @@ public class UserInfoResponse {
 
     public String getAccess_token() {
         return access_token;
+    }
+
+    public String getUnionId() {
+        return unionId;
     }
 }
