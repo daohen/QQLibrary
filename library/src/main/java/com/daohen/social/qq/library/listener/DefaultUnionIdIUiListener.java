@@ -38,8 +38,8 @@ public class DefaultUnionIdIUiListener implements IUiListener {
         Type type = new TypeToken<UnionIdResponse>(){}.getType();
         UnionIdResponse response = GsonFactory.getDefault().fromJson(jsonObject.toString(), type);
 
-        if (loginIUiListener != null && response.isValid())
-            loginIUiListener.setUnionId(response.getNameValuePairs().getUnionid());
+        if (loginIUiListener != null && response != null)
+            loginIUiListener.setUnionId(response.getUnionid());
 
         if (callback != null)
             callback.run();

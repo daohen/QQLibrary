@@ -7,24 +7,12 @@ package com.daohen.social.qq.library.bean;
  */
 public class UnionIdResponse {
 
-    public boolean isValid(){
-        return nameValuePairs != null;
-    }
+    private String client_id;
+    private String openid;
+    private String unionid;
 
-    private UnionIdEntity nameValuePairs;
-
-    public UnionIdEntity getNameValuePairs() {
-        return nameValuePairs;
-    }
-
-    public static class UnionIdEntity{
-        private String client_id;
-        private String openid;
-        private String unionid;
-
-        public String getUnionid() {
-            return unionid;
-        }
+    public String getUnionid() {
+        return unionid;
     }
 
 }
